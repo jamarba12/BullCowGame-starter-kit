@@ -1,6 +1,6 @@
 # BullCowGame
 
-**INTRODUCTION**
+# <center>INTRODUCTION</center>
 
 This project is a work made with the course **Learn Unreal Engine C++ Developer: Learn C++ and Make Videogames** by _Ben Tristem_.
 
