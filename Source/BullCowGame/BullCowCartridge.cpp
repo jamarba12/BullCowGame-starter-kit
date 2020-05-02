@@ -27,13 +27,17 @@ void UBullCowCartridge::SetupGame()
     //Welcoming The Player
     PrintLine(TEXT("Welcome to Bull Cow!"));
     
-    HiddenWord = TEXT("loved"); //Set the HiddenWord
+    HiddenWord = TEXT("cakes"); //Set the HiddenWord
     Lives = HiddenWord.Len();//Set Lives 
     bGameOver = false;
      
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); 
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Type in your guess and \npress enter to continue... "));//Prompt Player For Guess
+
+    const TCHAR HW[] = TEXT("plums");
+    PrintLine(TEXT("Character 1 of the hidden word is: %c"), HiddenWord[0]); // print "c"
+    PrintLine(TEXT("The 4th character of HW is: %c"), HW[3]); //prints "m"
 }
 
 void UBullCowCartridge::EndGame()
@@ -50,10 +54,11 @@ void UBullCowCartridge::ProcessGuess(FString Guess){
     }
     
     //Check if Isogram
-    // if (IsIsogram)
-    // {
-    //     PrintLine(TEXT("No repeating letters, guess again"));
-    // }
+    if (!IsIsogram(Guess))
+    {
+        PrintLine(TEXT("No repeating letters, guess again"));
+        return;
+    }
     
     if (Guess.Len() != HiddenWord.Len())
     {
@@ -77,4 +82,15 @@ void UBullCowCartridge::ProcessGuess(FString Guess){
     
     //Show the player Bulls and Cows
     PrintLine(TEXT("Guess again, you have %i lives left"), Lives);
+}
+
+bool UBullCowCartridge::IsIsogram(const FString Word)
+{
+    // For each letter.
+    // Start at element [0].
+    // Compare against the next letter.
+    // Until We reach [Word.Len() -1]
+    // if any are the same return false 
+    
+    return true;
 }
