@@ -1,15 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
-#include "Misc/FileHelper.h"
-#include "Misc/Paths.h"
+#include "HiddenWordList.h"
+// #include "Misc/FileHelper.h"
+// #include "Misc/Paths.h"
 // #include "Math/UnrealMathUtility.h"
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-    const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordLists/HiddenWordList.txt");
-    FFileHelper::LoadFileToStringArray(WordList, *WordListPath);
-    GetValidWords(WordList);
+    // const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordLists/HiddenWordList.txt");
+    // FFileHelper::LoadFileToStringArray(WordList, *WordListPath);
     
+    Isograms = GetValidWords(Words);
+
     SetupGame();
 }
 
@@ -30,7 +32,7 @@ void UBullCowCartridge::SetupGame()
     //Welcoming The Player
     PrintLine(TEXT("Welcome to Bull Cow!"));
     
-    HiddenWord = GetValidWords(WordList) [FMath::RandRange(0, GetValidWords(WordList).Num() - 1)];
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)];
     Lives = HiddenWord.Len();//Set Lives 
     bGameOver = false;
      
@@ -102,11 +104,11 @@ bool UBullCowCartridge::IsIsogram(const FString& Word) const
 TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const{
     TArray<FString> ValidWords;
     
-    for (FString Words : WordList)
+    for (FString Word : WordList)
     {
-        if (Words.Len() >=4 && Words.Len() <=8 && IsIsogram(Words))
+        if (Word.Len() >=4 && Word.Len() <=8 && IsIsogram(Word))
         {
-            ValidWords.Emplace(Words);
+            ValidWords.Emplace(Word);
         }
     }
     return ValidWords;
