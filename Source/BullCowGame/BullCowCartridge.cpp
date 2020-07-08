@@ -1,13 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
-#include "HiddenWordList.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-    
+    const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordLists/HiddenWordList.txt");
+    FFileHelper::LoadFileToStringArray(Words, *WordListPath);
     SetupGame();
-    
+
     PrintLine(TEXT("The number of possible words is %i"), Words.Num());
     PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); //Debug Line
 
@@ -17,9 +19,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
         {
             PrintLine(TEXT("%s"), *Words[Index]);
         }
-        
     }
-    
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -30,7 +30,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     }
     else //Checking PlayGuess
     {
-        ProcessGuess(Input);    
+        ProcessGuess(Input);
     }
 }
 
@@ -38,12 +38,12 @@ void UBullCowCartridge::SetupGame()
 {
     //Welcoming The Player
     PrintLine(TEXT("Welcome to Bull Cow!"));
-    
+
     HiddenWord = TEXT("cakes"); //Set the HiddenWord
-    Lives = HiddenWord.Len();//Set Lives 
+    Lives = HiddenWord.Len();//Set Lives
     bGameOver = false;
-     
-    PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); 
+
+    PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len());
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Type in your guess and \npress enter to continue... "));//Prompt Player For Guess
 
@@ -61,14 +61,14 @@ void UBullCowCartridge::ProcessGuess(FString Guess){
         EndGame();
         return;
     }
-    
+
     if (Guess.Len() != HiddenWord.Len())
     {
         PrintLine(TEXT("The hidden word is %i letters long."), HiddenWord.Len());
         PrintLine(TEXT("Sorry, try guessing again! \nYou have %i lives remaining"), Lives);
         return;
     }
-    
+
     //Check if Isogram
     if (!IsIsogram(Guess))
     {
@@ -85,9 +85,9 @@ void UBullCowCartridge::ProcessGuess(FString Guess){
         PrintLine(TEXT("You have no lives left"));
         PrintLine(TEXT("The hidden word was: %s"), *HiddenWord);
         EndGame();
-        return;           
+        return;
     }
-    
+
     //Show the player Bulls and Cows
     PrintLine(TEXT("Guess again, you have %i lives left"), Lives);
 }
@@ -101,9 +101,9 @@ bool UBullCowCartridge::IsIsogram(const FString Word) const
             if (Word[Index] == Word[Comparison])
             {
                 return false;
-            }   
+            }
         }
     }
-    
+
     return true;
 }
