@@ -5,25 +5,9 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-    GetValidWords(Words);
+    Isograms = GetValidWords(Words);
     
-    int32 a = 0;
-    int32 b = 5;
-    const int32& refa = a;
-
-    PrintLine(TEXT("a = %i, b = %i, refa = %i"),a , b, refa);
-
-    //refa = b;
-
-    PrintLine(TEXT("a = %i, b = %i, refa = %i"),a , b, refa);
-
-
     SetupGame();
-    
-    PrintLine(TEXT("The number of possible words is %i"), Words.Num());
-    PrintLine(TEXT("The number of valid words is: %i."), GetValidWords(Words).Num());
-    PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); //Debug Line
-    
 }
 
 void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
@@ -41,9 +25,9 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 void UBullCowCartridge::SetupGame()
 {
     //Welcoming The Player
-    PrintLine(TEXT("Welcome to Bull Cow!"));
+    PrintLine(TEXT("Welcome to Bull Cow!"));   
     
-    HiddenWord = TEXT("cakes"); //Set the HiddenWord
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)];
     Lives = HiddenWord.Len();//Set Lives 
     bGameOver = false;
      
@@ -51,6 +35,7 @@ void UBullCowCartridge::SetupGame()
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Type in your guess and \npress enter to continue... "));//Prompt Player For Guess
 
+    PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); //Debug Line
 }
 
 void UBullCowCartridge::EndGame()
