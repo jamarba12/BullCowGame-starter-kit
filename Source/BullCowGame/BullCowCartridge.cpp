@@ -7,6 +7,8 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     Super::BeginPlay();
     Isograms = GetValidWords(Words);
     
+    PrintLine(TEXT("WELCOME EVERYBODY!!"));
+    PrintLine(TEXT("Feel the pleasure to play the Isogram Game"));
     SetupGame();
 }
 
