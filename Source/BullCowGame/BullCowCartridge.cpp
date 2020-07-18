@@ -32,9 +32,9 @@ void UBullCowCartridge::SetupGame()
     bGameOver = false;
      
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); 
-    //PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); //Debug Line
     PrintLine(TEXT("You have %i lives."), Lives);
     PrintLine(TEXT("Type in your guess and \npress enter to continue... "));//Prompt Player For Guess
+    PrintLine(TEXT("The HiddenWord is: %s."), *HiddenWord); //Debug Line
 
 }
 
@@ -78,10 +78,9 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess){
     }
     
     //Show the player Bulls and Cows
-    int32 Bulls, Cows;
-    GetBullCows(Guess, Bulls, Cows);
+    FBullCowCount Score = GetBullCows(Guess);
 
-    PrintLine(TEXT("You have %i Bulls and %i Cows"), Bulls, Cows);
+    PrintLine(TEXT("You have %i Bulls and %i Cows"), Score.Bulls, Score.Cows);
 
     PrintLine(TEXT("Guess again, you have %i lives left"), Lives);
 }
@@ -116,9 +115,8 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     return ValidWords;
 }
 
-void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int32& CowCount) const{
-    BullCount = 0;
-    CowCount = 0;
+FBullCowCount UBullCowCartridge::GetBullCows(const FString& Guess) const{
+    FBullCowCount Count;
 
     // for every index Guess is same as index Hidden, BullCount ++
     //if not a bull was it a cow? if yes CowCount ++
@@ -127,15 +125,17 @@ void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int3
     {
         if (Guess[GuessIndex] == HiddenWord[GuessIndex])
         {
-            BullCount ++;
+            Count.Bulls++;
             continue;
         }
         for (int32 HiddenIndex = 0; HiddenIndex < HiddenWord.Len(); HiddenIndex++)
         {
             if (Guess[GuessIndex] == HiddenWord[HiddenIndex])
             {
-                CowCount ++;
+                Count.Cows++;
+                break;
             }   
         }
     }
+    return Count;
 }
